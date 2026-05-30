@@ -1,0 +1,53 @@
+from Safety import safety
+class system:
+    def __init__(self, available, processes):
+        self.available = available 
+        self.processes = processes 
+
+    def request(self, pid, req_vector):
+        # this is just locating the process from the pid that was provided
+        process = None
+        for p in self.processes:
+            if p.pid == pid:
+                process = p
+                break
+        if process is None:
+            return False # Process not found Excepiton
+
+        if not all(req_vector[i] <= self.available[i] for i in range(len(req_vector))):
+            return False # Request Exceeds Available Resources Exception
+        if not all(req_vector[i] <= process.need[i] for i in range(len(req_vector))):
+            return False # Request Exceeds Need to Execute Exception
+
+
+        # Save these old states for reollback if needed    
+        old_available = self.available.copy()
+        old_allocation = process.allocation.copy()
+        # Need tou khud sey hee compute hoti hai (see process class)
+          
+            
+        # Grant the request temporalily
+        self.available = [self.available[i] - req_vector[i] for i in range(len(req_vector))]
+        process.allocation = [process.allocation[j] + req_vector[j] for j in range(len(req_vector))]
+                
+        is_safe, _ = safety(self.processes, self.available)
+
+        if is_safe:
+            return True # Safe
+        else:
+            self.available = old_available
+            process.allocation = old_allocation
+            return False # Not Safe
+
+
+
+    def get_safe_sequence(self):
+        is_safe, sequence = safety(self.processes, self.available[:])
+        return sequence if is_safe else None
+
+    def display_state(self):
+        print(f"Available: {self.available}\n")
+        print(f"{'PID':<6} {'Allocation':<20} {'Max':<20} {'Need':<20}")
+        print("-" * 66)
+        for p in self.processes:
+            print(f"{p.pid:<6} {str(p.allocation):<20} {str(p.pmax):<20} {str(p.need):<20}")
