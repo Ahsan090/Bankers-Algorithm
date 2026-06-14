@@ -19,7 +19,7 @@ class BankersApp:
         self._req_count = 0
 
         # Widget refs for Screen 2
-        self.total_entries = []
+        self.avail_entries = []
         self.max_entries = []
         self.alloc_entries = []
 
@@ -131,7 +131,7 @@ class BankersApp:
         self._clear_screen()
         self.n_proc = n_proc
         self.n_res = n_res
-        self.total_entries = []
+        self.avail_entries = []
         self.max_entries = []
         self.alloc_entries = []
 
@@ -161,16 +161,16 @@ class BankersApp:
         ttk.Label(inner, text="Step 2: Enter System Data", style="Title.TLabel").grid(
             row=0, column=0, columnspan=2, pady=(0, 20), sticky="w")
 
-        # Total Resources
-        total_frame = ttk.LabelFrame(inner, text="Total Resources", padding=12)
-        total_frame.grid(row=1, column=0, columnspan=2, sticky="ew", pady=8)
+        # Available Resources
+        avail_frame = ttk.LabelFrame(inner, text="Available Resources", padding=12)
+        avail_frame.grid(row=1, column=0, columnspan=2, sticky="ew", pady=8)
         for j in range(n_res):
-            ttk.Label(total_frame, text=f"R{j}", style="Header.TLabel").grid(
+            ttk.Label(avail_frame, text=f"R{j}", style="Header.TLabel").grid(
                 row=0, column=j * 2, padx=(8, 2))
-            e = ttk.Entry(total_frame, width=5, font=("Helvetica", 10))
+            e = ttk.Entry(avail_frame, width=5, font=("Helvetica", 10))
             e.grid(row=0, column=j * 2 + 1, padx=(0, 12))
             e.insert(0, "0")
-            self.total_entries.append(e)
+            self.avail_entries.append(e)
 
         # Max Matrix
         max_frame = ttk.LabelFrame(inner, text="Maximum Demand Matrix", padding=12)
@@ -208,18 +208,18 @@ class BankersApp:
             store.append(row_entries)
 
     def _on_data_confirm(self):
-        # Parse total resources
-        total = []
-        for j, e in enumerate(self.total_entries):
+        # Parse available
+        available = []
+        for j, e in enumerate(self.avail_entries):
             try:
                 val = int(e.get())
             except ValueError:
-                messagebox.showerror("Invalid Input", f"Total R{j} must be an integer.")
+                messagebox.showerror("Invalid Input", f"Available R{j} must be an integer.")
                 return
             if val < 0:
-                messagebox.showerror("Invalid Input", f"Total R{j} cannot be negative.")
+                messagebox.showerror("Invalid Input", f"Available R{j} cannot be negative.")
                 return
-            total.append(val)
+            available.append(val)
 
         # Parse max and allocation
         processes = []
@@ -251,18 +251,8 @@ class BankersApp:
                 alloc.append(a)
             processes.append(process(f"P{i}", pmax, alloc))
 
-        # Compute available = total - sum of all allocations per resource
-        alloc_sums = [sum(p.allocation[j] for p in processes) for j in range(self.n_res)]
-        available = [total[j] - alloc_sums[j] for j in range(self.n_res)]
-        for j in range(self.n_res):
-            if available[j] < 0:
-                messagebox.showerror("Invalid Input",
-                                     f"R{j}: total allocated ({alloc_sums[j]}) exceeds "
-                                     f"total resources ({total[j]}).")
-                return
-
         self.pid_list = [f"P{i}" for i in range(self.n_proc)]
-        self.system = system(total, available, processes)
+        self.system = system(available, processes)
         self._req_count = 0
         self.show_main_screen()
 
@@ -436,8 +426,7 @@ class BankersApp:
             self.seq_label.config(text="Safe Sequence:  N/A  (deadlock risk)")
 
         self.avail_label.config(
-            text="Total Resources:  " + self._fmt_vec(self.system.total)
-                 + "     |     Available:  " + self._fmt_vec(self.system.available))
+            text="Available Resources:  " + self._fmt_vec(self.system.available))
 
         if self.wt_tree is not None:
             self._compute_walkthrough()

@@ -1,0 +1,72 @@
+Create a PowerPoint presentation for a university OS course project submission. Follow every instruction below precisely.
+Project Title: Banker's Algorithm — Deadlock Avoidance and Detection
+Course: Operating Systems
+Group Members: M.Ahsan (24FA-059-CS), M.Ahmad (24FA-050-CS), Umair Jan (24FA-009-CS), Umar Sani (24FA-038-CS)
+Presentation Duration: 10 minutes exactly, divided across 4 presenters. Allocate slide count and content per section based on what makes logical sense for that section's depth — not strictly equal.
+
+SLIDE STRUCTURE:
+Section 1 — Project Overview & Motivation (Presenter 1)
+
+Title slide: project title, all four group member names and IDs, course name, university name (Usman Institute of Technology)
+What is the project: a Python-based Banker's Algorithm simulator with a Tkinter GUI
+Why it matters: what problem does deadlock cause in operating systems, why avoiding it is critical
+Project motivation: simulate a classic OS deadlock avoidance algorithm in an interactive, visual way
+
+Section 2 — OS Concepts (Presenter 1 or 2, your call)
+
+Deadlock: what it is, the four necessary conditions (Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait)
+Deadlock handling strategies: prevention, avoidance, detection — clarify that Banker's Algorithm is an avoidance strategy
+Resource allocation concepts: processes, resource types, instances
+Keep this theoretical and clear — audience is classmates and a professor
+
+Section 3 — How Banker's Algorithm Works (Presenter 2)
+
+Key data structures explained clearly: Available, Maximum, Allocation, Need — what each means, how they relate. Need = Maximum − Allocation.
+The Safety Algorithm: explain the logic step by step in plain language (not code). Use a simple diagram or flowchart showing the loop — check if a process's Need can be satisfied by Available, if yes simulate granting it, add its Allocation back to Available, repeat.
+The Request Algorithm: explain the three checks — request must not exceed Need, request must not exceed Available, tentatively grant and run Safety check, rollback if unsafe.
+Include ONE short numerical example (3 processes, 3 resource types). Show the initial state table (Allocation, Max, Need, Available) and trace through the Safety Algorithm to find the safe sequence. Do not over-explain — keep it concise, one or two slides maximum.
+
+Section 4 — System Design & Implementation (Presenter 3)
+
+Architecture overview: three core modules — Process class, Safety Algorithm, System class. Explain what each does in one or two sentences. No code shown.
+Design decisions worth highlighting: Need as a computed property (not stored) to avoid sync issues, rollback mechanism in the Request handler, separation of logic from UI
+Tools used: Python, Tkinter
+A simple architecture diagram showing how the modules connect and how the UI sits on top
+
+Section 5 — Demo & Screenshots (Presenter 3 or 4)
+
+Leave the following clearly labeled placeholders in order:
+
+[INSERT SCREENSHOT: Input Screen — entering number of processes and resource types]
+[INSERT SCREENSHOT: Matrix Input Grid — entering Max and Allocation values]
+[INSERT SCREENSHOT: System State Display — showing Available, Allocation, Max, Need table]
+[INSERT SCREENSHOT: Request Input — entering a request vector]
+[INSERT SCREENSHOT: Result — Safe or Unsafe response shown in UI]
+
+
+Each placeholder slide should have a short caption describing what the screenshot demonstrates
+
+Section 6 — Key Findings & Conclusion (Presenter 4)
+
+What the project demonstrates about deadlock avoidance in practice
+Limitations of Banker's Algorithm: requires processes to declare maximum need upfront, assumes a fixed number of processes and resources, not practical for modern general-purpose OSes but valuable as a teaching model
+What the team learned from building it
+Closing slide: thank you, group member names
+
+
+DESIGN INSTRUCTIONS:
+
+Use a clean, professional academic style. Dark or navy theme preferred.
+Each slide should have a clear heading and concise bullet points — no paragraphs of text on slides
+Diagrams and flowcharts should be simple and readable
+Font size must be readable from a distance
+Do not put more than 6 bullet points on any single slide
+If a section needs more than one slide, split it — do not crowd slides
+
+
+STRICT CONSTRAINTS:
+
+Do not show any actual Python code on any slide
+Do not assign presenter names to sections — leave that to the group
+Every screenshot slide must use the placeholder labels exactly as written above
+The numerical example must be short — maximum 2 slides, 3 processes, 3 resource types only

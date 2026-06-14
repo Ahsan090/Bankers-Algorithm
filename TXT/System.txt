@@ -1,9 +1,8 @@
 from Safety import safety
 class system:
-    def __init__(self, total, available, processes):
-        self.total = total
-        self.available = available
-        self.processes = processes
+    def __init__(self, available, processes):
+        self.available = available 
+        self.processes = processes 
 
     def request(self, pid, req_vector):
         # this is just locating the process from the pid that was provided
@@ -16,9 +15,9 @@ class system:
             return False # Process not found Excepiton
 
         if not all(req_vector[i] <= self.available[i] for i in range(len(req_vector))):
-            return False # "Request Exceeds Available Resources" Exception
+            return False # Request Exceeds Available Resources Exception
         if not all(req_vector[i] <= process.need[i] for i in range(len(req_vector))):
-            return False # "Request Exceeds Need to Execute" Exception
+            return False # Request Exceeds Need to Execute Exception
 
 
         # Save these old states for reollback if needed    
